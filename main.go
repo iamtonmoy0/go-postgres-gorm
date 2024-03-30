@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -27,6 +28,26 @@ api:=app.Group("/api")
 	api.Delete("/delete-book/:id", r.DeleteBook)
 
 }
+
+func(r *Repository)CreateBook(c *fiber.Ctx) error{
+	book:Book{}
+response:=fiber.Map{"msg":""}
+	err:=c.BodyParser(&body)
+	if err != nil {
+		log.Fatalf("failed to  parse body %v", err)
+	}
+	err:=r.DB.Create(&book)
+	if err != nil {
+		c.Status(http.StatusBadRequest).JSON(err)
+	}
+	c.Status(http.StatusOK).JSON(&fiber.Map{"msg":"new book created"})
+}
+func(r *Repository)GetBook(c *fiber.Ctx) error{}
+func(r *Repository)GetBooks(c *fiber.Ctx) error{}
+func(r *Repository)UpdateBook(c *fiber.Ctx) error{}
+func(r *Repository)DeleteBook(c *fiber.Ctx) error{}
+
+
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
