@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/iamtonmoy0/go-postgres-gorm/storage"
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 )
@@ -20,7 +21,7 @@ type Repository struct {
 }
 
 func(r *Repository) SetupRoutes(app *fiber.App) {
-api:=app.Group("/api")
+	api:=app.Group("/api")
 	api.Post("/create-book",r.CreateBook)
 	api.Get("/get-book/:id",r.GetBook)
 	api.Get("/get-books",r.GetBooks)
@@ -71,6 +72,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
+
+db,err:=storage.NewConnection(config)
+if err != nil {
+	log.Fatal("could not load the database")
+}
+
 	r := Repository{
 		DB:db
 	}

@@ -18,4 +18,5 @@ func MigrateBooks(db *gorm.DB) error {
 	if err != nil {
 		fmt.Println("failed to migrate db", err)
 	}
+	return nil
 }
