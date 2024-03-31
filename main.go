@@ -31,7 +31,7 @@ api:=app.Group("/api")
 
 func(r *Repository)CreateBook(c *fiber.Ctx) error{
 	book:Book{}
-response:=fiber.Map{"msg":""}
+  //   response:=fiber.Map{"msg":""}
 	err:=c.BodyParser(&body)
 	if err != nil {
 		log.Fatalf("failed to  parse body %v", err)
@@ -41,9 +41,27 @@ response:=fiber.Map{"msg":""}
 		c.Status(http.StatusBadRequest).JSON(err)
 	}
 	c.Status(http.StatusOK).JSON(&fiber.Map{"msg":"new book created"})
+	return nil
 }
-func(r *Repository)GetBook(c *fiber.Ctx) error{}
-func(r *Repository)GetBooks(c *fiber.Ctx) error{}
+
+
+func(r *Repository)GetBook(c *fiber.Ctx) error{
+
+
+}
+func(r *Repository)GetBooks(c *fiber.Ctx) error{
+	books:=&[]models.Books{}
+
+err:=r.DB.Find(books)
+if err != nil {
+	c.Status(400).SendString("failed to find books")
+	return err
+}
+c.Status(201).JSON(&fiber.Map{"msg":"Successfully fetched data ","data":books})
+return nil
+}
+
+
 func(r *Repository)UpdateBook(c *fiber.Ctx) error{}
 func(r *Repository)DeleteBook(c *fiber.Ctx) error{}
 
