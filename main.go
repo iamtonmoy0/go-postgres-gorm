@@ -32,6 +32,7 @@ func (r *Repository) SetupRoutes(app *fiber.App) {
 
 }
 
+// create books
 func (r *Repository) CreateBook(c *fiber.Ctx) error {
 	book := Book{}
 	//   response:=fiber.Map{"msg":""}
@@ -47,9 +48,12 @@ func (r *Repository) CreateBook(c *fiber.Ctx) error {
 	return nil
 }
 
+// get single book
 func (r *Repository) GetBook(c *fiber.Ctx) error {
 	return nil
 }
+
+// get all books
 func (r *Repository) GetBooks(c *fiber.Ctx) error {
 	books := &[]models.Books{}
 
@@ -62,7 +66,14 @@ func (r *Repository) GetBooks(c *fiber.Ctx) error {
 	return nil
 }
 
+// update books
 func (r *Repository) UpdateBook(c *fiber.Ctx) error {
+
+	return nil
+}
+
+// delete books
+func (r *Repository) DeleteBook(c *fiber.Ctx) error {
 	book := models.Books{}
 	id := c.Params("id")
 	if id == "" {
@@ -75,11 +86,6 @@ func (r *Repository) UpdateBook(c *fiber.Ctx) error {
 	}
 	c.Status(http.StatusOK).JSON(fiber.Map{"msg": "Data deleted successfully"})
 	return nil
-
-}
-func (r *Repository) DeleteBook(c *fiber.Ctx) error {
-	return nil
-
 }
 
 func main() {
