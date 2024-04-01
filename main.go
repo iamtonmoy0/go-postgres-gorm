@@ -63,7 +63,19 @@ func (r *Repository) GetBooks(c *fiber.Ctx) error {
 }
 
 func (r *Repository) UpdateBook(c *fiber.Ctx) error {
+	book := models.Books{}
+	id := c.Params("id")
+	if id == "" {
+		c.Status(http.StatusInternalServerError).JSON(fiber.Map{"msg": "id should not be empty"})
+		return nil
+	}
+	err := r.DB.Delete(book, id)
+	if err != nil {
+		c.Status(http.StatusInternalServerError).JSON(fiber.Map{"msg": "failed to delete the item"})
+	}
+	c.Status(http.StatusOK).JSON(fiber.Map{"msg": "Data deleted successfully"})
 	return nil
+
 }
 func (r *Repository) DeleteBook(c *fiber.Ctx) error {
 	return nil
@@ -88,7 +100,10 @@ func main() {
 	if err != nil {
 		log.Fatal("could not load the database")
 	}
-
+	err = models.MigrateBooks(db)
+	if err != nil {
+		log.Fatal(err)
+	}
 	r := Repository{
 		DB: db,
 	}
